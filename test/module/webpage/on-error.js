@@ -76,11 +76,11 @@ function check_stack(message, stack) {
 
     if (typeof stack === "string") {
         var lines = stack.split("\n");
-        assert_regexp_match(lines[0], RegExp("^bar@.*?"+helperBase+":7:23$"));
+        assert_regexp_match(lines[0], RegExp("^bar@.*?"+helperBase+":8:23$"));
         assert_regexp_match(lines[1], RegExp("^foo@.*?"+helperBase+":3:17$"));
     } else {
         assert_regexp_match(stack[0].file, RegExp(helperBase));
-        assert_equals(stack[0].line, 7);
+        assert_equals(stack[0].line, 8);
         assert_equals(stack[0]["function"], "bar");
 
         assert_regexp_match(stack[1].file, RegExp(helperBase));

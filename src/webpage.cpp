@@ -766,7 +766,7 @@ QVariant WebPage::evaluateJavaScript(const QString& code)
 
     qDebug() << "WebPage - evaluateJavaScript" << function;
 
-    evalResult = m_currentFrame->evaluateJavaScript(function);
+    evalResult = m_currentFrame->evaluateJavaScript(function, QString("phantomjs://webpage.evaluate()"));
 
     qDebug() << "WebPage - evaluateJavaScript result" << evalResult;
 
@@ -938,7 +938,7 @@ void WebPage::openUrl(const QString& address, const QVariant& op, const QVariant
     }
 
     if (networkOp == QNetworkAccessManager::UnknownOperation) {
-        m_mainFrame->evaluateJavaScript("console.error('Unknown network operation: " + operation + "');");
+        m_mainFrame->evaluateJavaScript("console.error('Unknown network operation: " + operation + "');", QString());
         return;
     }
 
@@ -1346,7 +1346,7 @@ QString getHeaderFooter(const QVariantMap& map, const QString& key, QWebFrame* f
             }
         }
     }
-    frame->evaluateJavaScript("console.error('Bad header callback given, use phantom.callback);");
+    frame->evaluateJavaScript("console.error('Bad header callback given, use phantom.callback);", QString());
     return QString();
 }
 
@@ -1385,7 +1385,7 @@ bool WebPage::injectJs(const QString& jsFilePath)
 
 void WebPage::_appendScriptElement(const QString& scriptUrl)
 {
-    m_currentFrame->evaluateJavaScript(QString(JS_APPEND_SCRIPT_ELEMENT).arg(scriptUrl));
+    m_currentFrame->evaluateJavaScript(QString(JS_APPEND_SCRIPT_ELEMENT).arg(scriptUrl), scriptUrl);
 }
 
 QObject* WebPage::_getGenericCallback()
