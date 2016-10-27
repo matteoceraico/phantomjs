@@ -4,7 +4,7 @@
 [submodule "src/qt/webkit"]
 	path = src/qt/webkit
 	url = https://github.com/matteoceraico/webkit.git
-	branch = qtwebkit-phantom
+	branch = qtwebkit-phantom-v2
 [submodule "src/qt/qtbase"]
 	path = src/qt/qtbase
 	url = https://github.com/matteoceraico/qtbase.git
