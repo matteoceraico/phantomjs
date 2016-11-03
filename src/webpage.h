@@ -35,7 +35,6 @@
 #include <QVariantMap>
 #include <QWebPage>
 #include <QWebFrame>
-#include <QPdfWriter>
 
 #include "cookiejar.h"
 
@@ -46,7 +45,7 @@ class NetworkAccessManager;
 class QWebInspector;
 class Phantom;
 
-class WebPage : public QObject
+class WebPage : public QObject, public QWebFrame::PrintCallback
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title)
@@ -517,7 +516,7 @@ private slots:
 private:
     enum RenderMode { Content, Viewport };
     QImage renderImage(const RenderMode mode = Content);
-    bool renderPdf(QPdfWriter& pdfWriter);
+    bool renderPdf(const QString& fileName);
     void applySettings(const QVariantMap& defaultSettings);
     QString userAgent() const;
 
