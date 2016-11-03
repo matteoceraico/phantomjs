@@ -1102,7 +1102,8 @@ QImage WebPage::renderImage(const RenderMode mode)
         frameRect = QRect(QPoint(0, 0), viewportSize);
     } else {
         QSize contentsSize = m_mainFrame->contentsSize();
-        contentsSize -= QSize(m_scrollPosition.x(), m_scrollPosition.y());
+        QPoint currScrollPos = m_mainFrame->scrollPosition();
+        contentsSize -= QSize(currScrollPos.x(), currScrollPos.y());
         frameRect = QRect(QPoint(0, 0), contentsSize);
         m_customWebPage->setViewportSize(contentsSize);
     }
