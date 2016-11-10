@@ -379,7 +379,8 @@ class PhantomJSBuilder(object):
             "--no-fullscreen-api",
             "--no-legacy-web-audio",
             "--no-legacy-vendor-prefixes",
-            "--no-web-replay"
+            "--no-web-replay",
+            "--no-jit"
         ]
 
         print("building Qt WebKit, please wait...")
