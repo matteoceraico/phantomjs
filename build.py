@@ -270,9 +270,6 @@ class PhantomJSBuilder(object):
             # we use an in-source build for now and never want to install
             "-prefix", os.path.abspath("src/qt/qtbase"),
             # use the bundled libraries, vs. system-installed ones
-            #"-qt-zlib",
-            #"-qt-libpng",
-            #"-qt-libjpeg",
             "-qt-pcre",
             # disable unnecessary Qt features
             "-nomake", "examples",
@@ -358,9 +355,8 @@ class PhantomJSBuilder(object):
             "-DCMAKE_INSTALL_PREFIX=" + os.path.abspath("src/qt/qtwebkit"),
             "-DCMAKE_PREFIX_PATH="+ os.path.abspath("src/qt/qtbase"),
             "-DQT_COMPILE_DEFINITIONS=\"" + " ".join(qt_compile_defs) + "\"",
-            #"-DQT_BUNDLED_JPEG=ON",
-            #"-DQT_BUNDLED_PNG=ON",
-            #"-DQT_BUNDLED_ZLIB=ON",
+            "-DENABLE_OPENGL=OFF",
+            "-DENABLE_WEBKIT2=OFF",
             "-DENABLE_TOOLS=OFF",
             "-DENABLE_API_TESTS=OFF",
             "-DENABLE_TEST_SUPPORT=OFF",
