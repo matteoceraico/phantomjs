@@ -303,7 +303,7 @@ class PhantomJSBuilder(object):
             configure.extend(''.join(self.options.qt_config).split(" "))
 
         if self.options.debug:
-            configure.append("-debug")
+            configure.append("-force-debug-info")
         elif self.options.release:
             configure.append("-release")
         else:
@@ -378,6 +378,10 @@ class PhantomJSBuilder(object):
             "--no-web-replay",
             "--no-jit"
         ]
+        if self.options.debug:
+            command.append("--debug")
+        else:
+            command.append("--release")
 
         print("building Qt WebKit, please wait...")
         if self.execute(shlex.split(" ".join(command)), "src/qt/webkit") != 0:
@@ -390,7 +394,10 @@ class PhantomJSBuilder(object):
         # Installing new libraries
         command = list(self.makeCommand);
         command.append("install");
-        self.execute(command, "src/qt/webkit/WebKitBuild/Release")
+        if self.options.debug:
+            self.execute(command, "src/qt/webkit/WebKitBuild/Debug")
+        else:
+            self.execute(command, "src/qt/webkit/WebKitBuild/Release")
 
         # Moving needed libraries into qtbase
         command = ["cp", os.path.abspath("src/qt/qtwebkit/mkspecs/modules/qt_lib_webkit*"), os.path.abspath("src/qt/qtbase/mkspecs/modules/")]
