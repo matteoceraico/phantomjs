@@ -54,20 +54,37 @@ qt_compile_defs = [
 ]
 
 openssl_search_paths = [{
-  "name": "Brew",
-  "header": "/usr/local/opt/openssl/include/openssl/opensslv.h",
-  "flags": [
-    "-I/usr/local/opt/openssl/include",
-    "-L/usr/local/opt/openssl/lib"
-  ]
+    "name": "Brew",
+    "header": "/usr/local/opt/openssl/include/openssl/opensslv.h",
+    "flags": [
+        "-I/usr/local/opt/openssl/include",
+        "-L/usr/local/opt/openssl/lib"
+    ]
 }, {
-  "name": "MacPorts",
-  "header": "/opt/local/include/openssl/opensslv.h",
-  "flags": [
-    "-I/opt/local/include",
-    "-L/opt/local/lib"
-  ]
+    "name": "MacPorts",
+    "header": "/opt/local/include/openssl/opensslv.h",
+    "flags": [
+        "-I/opt/local/include",
+        "-L/opt/local/lib"
+    ]
 }]
+
+brew_deps = [{
+    "name": "libpng",
+    "header": "/usr/local/include/libpng16/png.h",
+    "flags": [
+        "-I/usr/local/include/libpng16",
+        "-L/usr/local/lib"
+    ]
+}, {
+    "name": "jpeg",
+    "header": "/usr/local/include/jpeglib.h",
+    "flags": [
+        "-I/usr/local/include",
+        "-L/usr/local/lib"
+    ]
+}
+]
 
 # check if path points to an executable
 # source: http://stackoverflow.com/a/377028
@@ -191,6 +208,8 @@ class PhantomJSBuilder(object):
                 "-qpa", "phantom",
                 # disable qpa guard
                 "-no-qpa-platform-guard",
+                "-system-libpng",
+                "-system-libjpeg",
                 # explicitly compile with SSL support, so build will fail if headers are missing
                 "-openssl", "-openssl-linked",
                 # disable unnecessary Qt features
@@ -220,10 +239,16 @@ class PhantomJSBuilder(object):
 
             if platform.system() == "Darwin":
                 # Mac OS specific options
-                # NOTE: fontconfig is not required on Darwin (we use Core Text for font enumeration)
                 platformOptions.extend([
-                    "-no-pkg-config"
+                    "-no-pkg-config",
+                    "-no-fontconfig", # NOTE: fontconfig is not required on Darwin (we use Core Text for font enumeration)
+                    "-no-freetype"
                 ])
+                for dep in brew_deps:
+                    if os.path.exists(dep["header"]):
+                        platformOptions.extend(dep["flags"])
+                    else:
+                        raise RuntimeError("Could not find " + dep["name"] + "\n\nTry to fix with: brew install " + dep["name"] +"\n")
                 # Dirty hack to find OpenSSL libs
                 openssl = os.getenv("OPENSSL", "")
                 if openssl == "":
